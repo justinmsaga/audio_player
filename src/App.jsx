@@ -119,12 +119,11 @@ export default function App(){
 
     let show = (showType === "field recording" ? soundFile : windFile)
 
-    const style = {
+     const style = {
         position: "fixed",
         height: "100%",
         width: "40%",
         backgroundColor: "white"
-
     }
 
     const mediaStl ={
