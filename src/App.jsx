@@ -139,7 +139,8 @@ export default function App(){
                 style = {style}
             >
             <a href="https://baked.cloud/about/who.html">recorded by bushsk8r</a>
-            <p class="subheading">[this is a prototype...also free Palestine]</p>
+            <p class="subheading">[this is a prototype...also why war?]</p>
+            <p>*December sessions</p>
             <h1 class="title">jukebox</h1>
             {recType}
             <Media

@@ -1,4 +1,16 @@
-export default[
+export default [
+    {
+        id: 80,
+        name: "recording 80*",
+        location: "https://arweave.net/0Ywfi4IvLBwYJxukrCnMd2RE0ccMENETmJlODDW4nTc",
+        description: "December sessions",
+    },
+    {
+        id: 79,
+        name: "recording 79*",
+        location: "https://arweave.net/PE0Ca8F-HzEd_UxdyfRNKzjkTi2SsJ3li5wgZOEzjuU",
+        description: "December sessions",
+    },
     {
         id: 78,
         name: "recording 78",
