@@ -1,21 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Play from "./Player"
 import Media from "./Media";
 import Display from "./Display Recording";
-import field from "./Field Recording.js"
-import wind from "./Wind Recording.js"
 
-//const data = require('./field.json')
-//console.log(data)
 
-//add display to data
-let inAppField = field.map(file => {
-    return {...file, display: false, type: "field"}
-})
-
-let inAppWind = wind.map(file => {
-    return {...file, display: false, type: "wind"}
-})
+//loading placeholder
+let template = [{
+    id: 0,
+    name: "loading",
+    location : null,
+    description: "loading",
+    display: false,
+    type: "wind"
+}
+] 
 
 let recordType =[
     {
@@ -33,7 +31,7 @@ let recordType =[
 ]
 
 let defaultMedia ={
-            fileLinkTo: "B2nYw9URD4fYF_CSCLdMKWA5_CCjnRrDdC95cMogaUk",
+            fileLinkTo: "https://arweave.net/B2nYw9URD4fYF_CSCLdMKWA5_CCjnRrDdC95cMogaUk",
             fileDesctiption: "select audio"
 
 }
@@ -44,11 +42,31 @@ export default function App(){
     const [showType, setShowType] = React.useState("field recording")
 
     //add state to files and media
-    const [field, setField] = React.useState(inAppField)
-    const [wind, setWind] = React.useState(inAppWind)
+    const [field, setField] = React.useState(template)
+    const [wind, setWind] = React.useState(template)
     const [playMedia, setPlayMedia] = React.useState(defaultMedia)
 
-    //update display type
+    //get files
+    const fetchJson = () =>{
+        fetch('https://msaga.cloud/archive/recording.json')
+            .then(response => {return response.json()})
+            .then(data =>{
+                setField(data["wood_recordings"].tracks.map(track =>{
+                    return {...track, display: false, type: "field"}
+                }))
+                setWind(data["wind_recording"].tracks.map(track =>{
+                    return {...track, display: false, type: "wind"}
+                }))
+            })
+            .catch(e => {
+                console.log(e)
+            })
+    }
+
+    useEffect(() =>{
+        fetchJson()
+    }, [])
+
 
     //update media link
     function updateMedia(link,des){

@@ -17,7 +17,7 @@ export default function Media(props){
             className="media"
             style={styles}
         >
-            <audio src={`https://arweave.net/${props.link}`} controls></audio>
+            <audio src={`${props.link}`} controls></audio>
             <h2>{props.desc}</h2>
         </div>
     )
