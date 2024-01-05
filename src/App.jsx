@@ -27,6 +27,11 @@ let recordType =[
         name: "wind recording",
         display: false
 
+    },
+    {
+        id: 2,
+        name: "echo chamber",
+        display: false
     }
 ]
 
@@ -44,6 +49,7 @@ export default function App(){
     //add state to files and media
     const [field, setField] = React.useState(template)
     const [wind, setWind] = React.useState(template)
+    const [echo, setEcho] = React.useState(template)
     const [playMedia, setPlayMedia] = React.useState(defaultMedia)
 
     //get files
@@ -56,6 +62,9 @@ export default function App(){
                 }))
                 setWind(data["wind_recording"].tracks.map(track =>{
                     return {...track, display: false, type: "wind"}
+                }))
+                setEcho(data["echo_chamber"].series_1.vol_1.map(track =>{
+                    return {...track, display: false, type: "echo"}
                 }))
             })
             .catch(e => {
@@ -74,6 +83,7 @@ export default function App(){
             return { fileLinkTo: link, fileDesctiption: des}
         })
     }
+
     function updateTypeColor(name){
             setDisplay(prevDisp =>{
                 return prevDisp.map((disp)=>{
@@ -86,20 +96,33 @@ export default function App(){
 
     //update display color
     function updateColor(link, des, type){
-        if(type === "field"){
-         setField(prevFile => {
-                return prevFile.map((file) => {
-                            updateMedia(link, des)
-                            return file.location === link ? {...file, display: !file.display} : file
+        switch(type){
+            case 'field':
+                setField(prevFile => {
+                    return prevFile.map((file) => {
+                        updateMedia(link, des)
+                        return file.location === link ? {...file, display: !file.display} : file
+                    })
                 })
-            })
-        } else{
-            setWind(prevFile => {
-                return prevFile.map((file) => {
-                            updateMedia(link, des)
-                            return file.location === link ? {...file, display: !file.display} : file
+                break
+
+            case 'wind':
+                setWind(prevFile => {
+                    return prevFile.map((file) => {
+                        updateMedia(link, des)
+                        return file.location === link ? {...file, display: !file.display} : file
+                    })
                 })
-            })
+                break
+
+            case 'echo':
+                setEcho(prevFile =>{
+                    return prevFile.map((file) => {
+                        updateMedia(link,des)
+                        return file.location === link ? {...file, display: !file.display} : file
+                    })
+                })
+                break
         }
     }
 
@@ -112,30 +135,31 @@ export default function App(){
             />
     })
 
-    //array of audio files from data
-    const soundFile = field.map(file => {
-        return <Play 
+    //array of audio files to be displayed from data
+    function updatePlay(files){
+        return files.map(file =>{
+            return <Play
                     key={file.id}
                     name={file.name}
                     curLink={playMedia.fileLinkTo}
                     location={file.location}
-                    setFiles= {() => updateColor(file.location, file.description, file.type)}
+                    length={file.length}
+                    setFiles={() => updateColor(file.location, file.description, file.type)}
                 />
-    })
+        })
+    }
 
-    const windFile = wind.map(file =>{
-        return <Play
-                    key={file.id}
-                    name={file.name}
-                    curLink={playMedia.fileLinkTo}
-                    location={file.location}
-                    setFiles= {() => updateColor(file.location, file.description, file.type)}
-                />
+    let show = (sT) => {
+        if(sT === "field recording")
+                return updatePlay(field)
 
+        if(sT === "wind recording")
+                return updatePlay(wind)
 
-    } )
+        if(sT === "echo chamber")
+                return updatePlay(echo)
+    }
 
-    let show = (showType === "field recording" ? soundFile : windFile)
 
      const style = {
         position: "fixed",
@@ -153,21 +177,20 @@ export default function App(){
     //return file and media
     return(
         <div>
-            <div
-                style = {style}
-            >
-            <a href="https://baked.cloud/about/who.html">recorded by bushsk8r</a>
-            <p class="subheading">[this is a prototype...also why war?]</p>
-            <p>*December sessions</p>
-            <h1 class="title">jukebox</h1>
-            {recType}
-            <Media
-                link={playMedia.fileLinkTo}
-                desc={playMedia.fileDesctiption}
-             />
+            <div style = {style}>
+                <p>*December sessions</p>
+                <h1 class="title">jukebox</h1>
+                {recType}
+                <Media
+                    link={playMedia.fileLinkTo}
+                    desc={playMedia.fileDesctiption}
+                />
+                <a href="https://baked.cloud/about/who.html">recorded by bushsk8r</a>
+                <p class="subheading">[this is a prototype...also why war?]</p>
              </div>
+
              <div style={mediaStl}>
-            {show}
+                {show(showType)}
             </div>
         </div>
     )

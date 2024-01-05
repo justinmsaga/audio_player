@@ -13,6 +13,7 @@ export default function Display(props){
             onClick={props.setDisp}
             >
                 <h3>{props.name}</h3>
+                <p>{props.length}</p>
 
         </div>
     )

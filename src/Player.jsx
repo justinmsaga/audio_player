@@ -16,5 +16,6 @@ export default function Play(props){
             onClick={props.setFiles}
         >
             <p>{props.name}</p>
+            <p>{props.length}</p>
         </div>
 )}
