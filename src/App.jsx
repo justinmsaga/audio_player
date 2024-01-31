@@ -178,7 +178,7 @@ export default function App(){
     return(
         <div>
             <div style = {style}>
-                <p>*December sessions</p>
+                <p>*January sessions</p>
                 <h1 class="title">jukebox</h1>
                 {recType}
                 <Media
